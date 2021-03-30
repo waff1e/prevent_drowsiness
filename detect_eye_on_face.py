@@ -1,4 +1,18 @@
+"""
+To-Do-List
+1.알람이 울림 때 마다 영상이 멈춰버리는 현상 발생!!!
+	해결 방법: 알람을 울려주는 스레드를 생성시켜 준다.
+
+2.알람의 단계를 3단계로 구성 
+	어떤 기준을 통해서 단계를 올릴지 고민해 볼 필요가 있다.
+
+3. 카메라 장착 위치와 비추는 각도를 어떻게 하는지 찾아 볼 것!!!
+
+"""
+
 import cv2
+#from alarm import alarm
+from worker import Worker
 
 model = 'res10_300x300_ssd_iter_140000.caffemodel'
 config = 'deploy.prototxt'
@@ -17,11 +31,14 @@ def check_eye(frame):
     # flags = cv2.CV_HAAR_SCALE_IMAGE
     )
     if len(eyes) == 0:
+#        alarm('sample.mp3')
+        t = Worker()
+        t.start()
         print('no eyes!!!')
     else:
         print('eyes!!!')
     return eyes
-    
+
 cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
