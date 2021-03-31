@@ -9,18 +9,19 @@ To-Do-List
 3. 카메라 장착 위치와 비추는 각도를 어떻게 하는지 찾아 볼 것!!!
 
 """
-
+from playsound import playsound
 import cv2
-#from alarm import alarm
-from worker import Worker
+import threading
+import time
 
 model = 'res10_300x300_ssd_iter_140000.caffemodel'
 config = 'deploy.prototxt'
-#model = 'opencv_face_detector_uint8.pb'
-#config = 'opencv_face_detector.pbtxt'
 
 eye_cascPath = 'haarcascade_eye_tree_eyeglasses.xml'  #eye detect model
 eyeCascade = cv2.CascadeClassifier(eye_cascPath)
+
+def alarm():
+	playsound("sample.mp3")
 
 def check_eye(frame):
     eyes = eyeCascade.detectMultiScale(
@@ -31,10 +32,10 @@ def check_eye(frame):
     # flags = cv2.CV_HAAR_SCALE_IMAGE
     )
     if len(eyes) == 0:
-#        alarm('sample.mp3')
-        t = Worker()
-        t.start()
-        print('no eyes!!!')
+       t =  threading.Thread(target=alarm)
+       t.demon = True
+       t.start() 
+       print('no eyes!!!')
     else:
         print('eyes!!!')
     return eyes
